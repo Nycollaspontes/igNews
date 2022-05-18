@@ -1,0 +1,21 @@
+{
+  "id": "609a629b-c1b0-486f-bbef-dc3d3dc659a7",
+  "uid": "deleniti-aliquam-pariatur",
+  "type": "Publication",
+  "data": {
+    "Title": [
+      {
+        "type": "heading1",
+        "text": "Grow frictionless platforms",
+        "spans": []
+      }
+    ],
+    "Content": [
+      {
+        "type": "paragraph",
+        "text": "Laborum eu anim amet sint veniam cupidatat commodo dolor veniam nulla culpa tempor et. Sit quis culpa aliquip laborum Lorem laboris amet ad officia elit et.",
+        "spans": []
+      }
+    ]
+  }
+}
