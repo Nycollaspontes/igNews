@@ -1,19 +1,19 @@
 {
-  "id": "609a629b-c1b0-486f-bbef-dc3d3dc659a7",
-  "uid": "deleniti-aliquam-pariatur",
+  "id": "c38f0d3f-7f04-4d08-b778-a9a952e89ee3",
+  "uid": "vel-nisi-ab",
   "type": "Publication",
   "data": {
-    "Title": [
+    "title": [
       {
         "type": "heading1",
-        "text": "Grow frictionless platforms",
+        "text": "Strategize viral bandwidth",
         "spans": []
       }
     ],
-    "Content": [
+    "content": [
       {
         "type": "paragraph",
-        "text": "Laborum eu anim amet sint veniam cupidatat commodo dolor veniam nulla culpa tempor et. Sit quis culpa aliquip laborum Lorem laboris amet ad officia elit et.",
+        "text": "Ex irure duis eiusmod eiusmod irure ipsum labore est.",
         "spans": []
       }
     ]
