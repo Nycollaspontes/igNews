@@ -1,38 +1,67 @@
 import { query as q } from 'faunadb';
 
-import NextAuth from 'next-auth'
-import GitHubProvider from "next-auth/providers/github";
+import GithubProvider from "next-auth/providers/github"
+import NextAuth from "next-auth"
 
-import { fauna } from '../../../services/fauna';
-
-
-// Arquivo de configuracao do Next-Auth
-//
+import { fauna } from "../../../services/fauna";
 
 export default NextAuth({
+  // Configure one or more authentication providers
   providers: [
-    GitHubProvider({
+    GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      authorization: {
-        params: {
-          scope: 'read:user',
+      authorization : {
+        params : {
+          scope : "read:user",
         },
       },
     }),
   ],
-  // Configuracao do FaunaDB
-
+  // jwt: {
+  //   secret: process.env.SIGNING_KEY,
+  //   maxAge: 60 * 60 * 24 * 30,
+  // },
   callbacks: {
-    async signIn({user, account, profile}) {
-      // Cria um usuario no FaunaDB
-    
-      
-      const { email } = user
+    async session({ session }) {
+      try {
+        const activeSubscription = await fauna.query(
+          q.Get(
+            q.Intersection([
+              q.Match(
+                q.Index("subscription_by_user_ref"),
+                q.Select(
+                  "ref",
+                  q.Get(
+                    q.Match(
+                      q.Index("user_by_email"),
+                      q.Casefold(session.user.email)
+                    )
+                  )
+                )
+              ),
+              // -> q.Match(q.Index("sub_by_status", "active")),
+              q.Match(q.Index("subscriptions_by_status"), q.Casefold("active")),
+            ])
+          )
+        )
+        
+
+        return {
+          ...session,
+          activeSubscription,
+        };
+      } catch {
+        return {
+          ...session,
+          activeSubscription: null,
+        };
+      }
+    },
+    async signIn({ user , account , profile }) {
+      const { email } = user;
 
       try {
-
-        // Cria um usuario no FaunaDB
         await fauna.query(
           q.If(
             q.Not(
@@ -54,12 +83,14 @@ export default NextAuth({
               )
             )
           )
-        )
-        return true
+        );
+
+        return true;
+      } catch(e) {
+        console.log(e);
+        return false;
       }
-      catch {
-        return false
-      }
-    }
-  },
+
+    } 
+  }
 })

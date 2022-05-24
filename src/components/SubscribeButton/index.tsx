@@ -1,31 +1,52 @@
-import { signIn, useSession } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react'
+import { useRouter } from 'next/router';
 import { api } from '../../services/api';
 import { getStripeJs } from '../../services/stripe-js';
 
 import styles from './styles.module.scss';
 
 
+type StripeSessionProps = {
+    id: string;
+    mode: string;
+    currency: string;
+    customer: string;
+    expires_at: Date;
+    amount_total: Number;
+    payment_status: string;
+    amount_subtotal: number;
+    allow_promotion_codes: boolean;
 
-interface SubscribeButtonProps {
-    priceId: string;
-}
+};
 
-export function SubscribeButton({ priceId }: SubscribeButtonProps) {
-    const session  = useSession();
+export function SubscribeButton({ priceId }: { priceId: string }) {
+    const { data } = useSession();
+    const router = useRouter();
+
 
     async function handleSubscribe() {
-        if (!session) {
+        if (!data) {
             signIn('github')
             return;
         }
-        try {
-            const response = await api.post('/subscribe')
 
-            const { sessionId } = response.data;
+
+        if (data.activeSubscription) {
+            router.push('/posts');
+            return;
+        }
+        try {
+            const {data : stripeSession} = await api.post<StripeSessionProps>(
+                "/subscribe",
+                {
+                    user: data.user,
+                    priceId,
+                }
+            );
 
             const stripe = await getStripeJs()
 
-            stripe.redirectToCheckout({ sessionId })
+            await stripe.redirectToCheckout({sessionId : stripeSession.id});
         }
 
         //criação da checkout session
@@ -38,7 +59,7 @@ export function SubscribeButton({ priceId }: SubscribeButtonProps) {
             type="button"
             className={styles.subscribeButton}
             onClick={handleSubscribe}>
-            Subscribe Now
+            {data && data.activeSubscription ? 'View posts': 'Subscribe Now'}
         </button>
-    )
+    );
 }
