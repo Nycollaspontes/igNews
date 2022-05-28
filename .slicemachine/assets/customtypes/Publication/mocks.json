@@ -1,0 +1,26 @@
+{
+  "id": "aba4683e-b61a-444b-af43-dd076b28f929",
+  "uid": "expedita-et-quia",
+  "type": "Publication",
+  "data": {
+    "title": [
+      {
+        "type": "heading1",
+        "text": "Maximize dynamic architectures",
+        "spans": []
+      }
+    ],
+    "content": [
+      {
+        "type": "heading1",
+        "text": "Innovate B2C users",
+        "spans": []
+      },
+      {
+        "type": "paragraph",
+        "text": "Sint excepteur ullamco culpa mollit nisi culpa sit laborum non irure veniam id dolor dolor.",
+        "spans": []
+      }
+    ]
+  }
+}
