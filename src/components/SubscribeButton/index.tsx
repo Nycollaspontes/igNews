@@ -13,7 +13,7 @@ interface  SubscribeButtonProps {
 
 // Exportando a  funcao como subscribe button
 export function SubscribeButton({ priceId }: SubscribeButtonProps) {
-    const session  = useSession();
+    const session  = useSession();      
     const router = useRouter();
 
 
