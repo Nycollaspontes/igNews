@@ -5,30 +5,28 @@ import { getStripeJs } from '../../services/stripe-js'
 
 import styles from './styles.module.scss';
 
-// Tipagem da StripeSessionProps
-interface  SubscribeButtonProps {
-    priceId : string;
-}
-
 
 // Exportando a  funcao como subscribe button
 export function SubscribeButton() {
-    const session  = useSession();      
+    // So pegou depois que eu desestruturei o use Session
+    const {data : session}  = useSession();      
     const router = useRouter();
 
     console.log(session)
 
+    
+
 
     async function handleSubscribe() {
         if (!session) {
-            signIn('github')
-            
-        }
-
-        if (session.data.activeSubscription) {
-            router.push('/posts');
+            signIn('github');
             return;
         }
+
+        if (session.activeSubscription) {
+            router.push('/posts');
+            return;
+        }   
         try {
             const response = await api.post('/subscribe')
             const  {sessionId: {id}}  = response.data;
